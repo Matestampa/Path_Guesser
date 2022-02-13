@@ -1,5 +1,6 @@
 from backend.utilities.grafos import Graph,Vertex
 from divisions import Gen_div,Division
+import interdiv_conex
 from math import sqrt
 from random import randint,choice
 
@@ -75,24 +76,40 @@ class Division_Graph(Graph):
                   
                   self.add_edge(div_value,neigh)
       
-      def create_rand_conex(self,fromm_value):
-          fromm_div=self.get_vertex(fromm_value)#obj div from
+      def create_div_conex(self,from_div,generator,n_nodes,n_conex):
+          #print(from_div)
+          div_obj=self.get_vertex(from_div)
+          nodes=generator.choose_nodes(div_obj,n_nodes)#eelgimos nodos del curr div
           
-          div_neigh=choice(fromm_div.get_neighs())#seleccionamos vecino al que vamos a conectar
-          div_neigh=self.get_vertex(div_neigh.value) #obj del vecino
-
-          fromm_node=choice(fromm_div.get_nodes())#seleccionamos value del nodo de div from
-          to_node=choice(div_neigh.get_nodes()) #seleccionamos value del nodo del vecino elegido
-
-          fromm_node=fromm_div.get_vertex(fromm_node) #obj del nodo de div from
-          to_node=div_neigh.get_vertex(to_node) #obj del nodo del vecino
-
-          dist=fromm_node.get_distance(to_node)#distancia
+          already_connected={}
+          new_edges=[]
           
-          new_edge=self.add_interdiv_edge(fromm_div,div_neigh,fromm_node,to_node,height=dist,format_back=True)
+          for node in nodes:
+              node=div_obj.get_vertex(node)
+              #print("node",node.value)
+              for j in range(n_conex):
+                  neigh_div=generator.choose_div(div_obj)#elegimos a que div se va a conectar
+                  neigh_div_obj=self.get_vertex(neigh_div)
+                  #print("div",neigh_div)
+                  neigh=generator.choose_neigh(neigh_div_obj,node)#elegimos el nodo de esa div
+                  #print("neigh")
+                  dist=node.get_distance(neigh)
+            
+                  edge=self.add_interdiv_edge(div_obj,neigh_div_obj,node,neigh,height=dist,format_back=True)
+                  
+                  neigh_div_obj.remove_vertex(node.value)
+            
+                  already_connected[neigh_div]="" #agregamos la div aca, para que aparezaca en ya visitadas
+                 
 
-          return new_edge
+                  new_edges.append(edge)
+    
+          for neigh_div in already_connected:#las ya visistadas, las desconecta para que no puedan volver a la curr
+              self.remove_edge(div_obj.value,neigh_div)
           
+          return new_edges
+
+      
       def add_interdiv_edge(self,div1,div2,v1,v2,height=0,format_back=False):
           div1.add_vertex(v2)
           new=div1.add_edge(v1.value,v2.value,height=height,format_back=True)
@@ -157,6 +174,7 @@ class Rand_Graph():
           divisions=div_generator.generate()
           
           #las metemos en un grafo
+          
           self.div_graph.create(divisions)
 
           #hacer nodes de c/u ------------------------------------------------
@@ -187,15 +205,32 @@ class Rand_Graph():
                   if new_edges!=None:
                      formatted_objs+=new_edges
               
-              new_edge=self.div_graph.create_rand_conex(div_value)
-              formatted_objs.append(new_edge)
+              if len(div.get_neighs())!=0:
+                 n_nodes,n_conex=self.make_conex_params(div)
+                 
+                 new_edges=self.div_graph.create_div_conex(div_value,generator=interdiv_conex.Full_Random(),n_nodes=n_nodes,n_conex=n_conex)
+                 formatted_objs+=new_edges
 
               
           
           
-
           return formatted_objs,divisions
 
+      def make_conex_params(self,div):
+          cant_nodes=len(div.get_nodes())
+
+          if cant_nodes<self.conex_complex:
+             max_nodes=cant_nodes
+          
+          else:
+              max_nodes=int(cant_nodes/2)
+
+          n_nodes=randint(1,max_nodes)
+          n_conex=randint(1,self.conex_complex)
+
+          return n_nodes,n_conex    
+
+      
       def descr(self):
           pass
           """#Genera todos los parametros que podemos usar para el ui
@@ -210,4 +245,20 @@ class Rand_Graph():
 
 
 
-                 
+"""def create_rand_conex(self,fromm_value):
+          fromm_div=self.get_vertex(fromm_value)#obj div from
+          
+          div_neigh=choice(fromm_div.get_neighs())#seleccionamos vecino al que vamos a conectar
+          div_neigh=self.get_vertex(div_neigh.value) #obj del vecino
+
+          fromm_node=choice(fromm_div.get_nodes())#seleccionamos value del nodo de div from
+          to_node=choice(div_neigh.get_nodes()) #seleccionamos value del nodo del vecino elegido
+
+          fromm_node=fromm_div.get_vertex(fromm_node) #obj del nodo de div from
+          to_node=div_neigh.get_vertex(to_node) #obj del nodo del vecino
+
+          dist=fromm_node.get_distance(to_node)#distancia
+          
+          new_edge=self.add_interdiv_edge(fromm_div,div_neigh,fromm_node,to_node,height=dist,format_back=True)
+
+          return new_edge"""          

@@ -12,7 +12,7 @@ class Memory_Graph():
 
               type=i["type"]
 
-              if i["type"]=='node':
+              if type=='node':
                  self.graph.add_vertex(i["value"])
                  
               
@@ -48,9 +48,10 @@ class Memory_Graph():
                  else:
                     node={"type":"node","value":steps[cont]}
                     edge={"type":"edge","value":steps[cont-1] +"-"+ steps[cont]}
-
+                    
                     formated_steps.append(edge)
                     formated_steps.append(node)
+                    
                  
               cont+=1
           

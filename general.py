@@ -29,7 +29,7 @@ def generate(n_nodes,conex_x_node=1):
 
     mem_graph.add(graph_data)
     screen.render(graph_data)
-    #screen.render(divisions)
+    screen.render(divisions)
     end=time.time()
     print("Time:"+str(end-start))
 

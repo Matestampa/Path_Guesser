@@ -44,7 +44,7 @@ class P_Queue(): #hicimos al reves del Queue normal
           
       
       def add(self,value,send_back=False):
-          new=Element(value,distance=1000,prev=None)
+          new=Element(value,distance=10000,prev=None)
           self.indexes[value]=0
 
           self.objects.insert(0,new)

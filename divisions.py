@@ -18,39 +18,11 @@ class Division(Graph,Vertex):
           
           #completarrrrrrrr----------------------------------------------------------------------------------------
       
-      def add_vertex(self,obj,format_back=False):
-          if self.vertexs.get(obj.value)!=None:
-             pass
-          else:
-             self.vertexs[obj.value]=obj
-
-          if format_back==True:
-             new={"type":"node","value":obj.value}
-             return new                   #vamos devolviendo formatos a medida que los creamos
-      
-      def add_edge(self, v1, v2, height=0,format_back=False):
-          super().add_edge(v1, v2, height)
-          
-          new={"type":"edge","value":v1+"-"+v2,"height":height}
-          if format_back==True:
-             return new        #lo mismo aca.
-
-      def create_rand_conex(self):#mallllll, hay que hacerlo en Division_Graph
-          neigh=choice(self.get_neighs())
-          neigh_node=choice(neigh.vertexs_keys)
-          node=choice(self.vertexs_keys)
-          
-          dist=neigh_node.get_distance(self.vertexs[node])
-          
-          return {"type":"edge","value":neigh_node.value+"-"+node,"height":dist}
-
       def create_rand_edge(self,root,n_conex,format_back=False):#Hay mucho para mejorar aca, hicmos una O() como el culo
           curr_node=self.vertexs[root]
           posible_neighs=self.vertexs_keys 
           new_edges=[]
 
-          
-          
           sel_node=curr_node.value
           
           conex_cont=0
@@ -77,6 +49,26 @@ class Division(Graph,Vertex):
       def get_nodes(self):
           self.vertexs_keys=list(self.vertexs.keys())
           return self.vertexs_keys
+      
+      def remove_vertex(self, value):
+          del self.vertexs[value]
+      
+      def add_vertex(self,obj,format_back=False):
+          if self.vertexs.get(obj.value)!=None:
+             pass
+          else:
+             self.vertexs[obj.value]=obj
+
+          if format_back==True:
+             new={"type":"node","value":obj.value}
+             return new                   #vamos devolviendo formatos a medida que los creamos
+      
+      def add_edge(self, v1, v2, height=0,format_back=False):
+          super().add_edge(v1, v2, height)
+          
+          new={"type":"edge","value":v1+"-"+v2,"height":height}
+          if format_back==True:
+             return new        #lo mismo aca.
 
       def __descr(self):
           pass
@@ -91,8 +83,6 @@ class Division(Graph,Vertex):
 
 
           
-
-
 
 class Gen_div_neighs():
       def __init__(self):
@@ -193,8 +183,8 @@ class Gen_div():
 
               max_nodes=round((div_size["x"]*div_size["y"])/self.p["max"]**2,0)
               
-              #if max_nodes<1:#si es uno solo o menos no nos sirve(es una division muy chica). Salteamos a la prox vuelta
-                 #continue
+              if max_nodes<1:#si es uno solo o menos no nos sirve(es una division muy chica). Salteamos a la prox vuelta
+                 continue
 
               if rest_nodes>0:#si quedan nodos restantes
                  if rest_nodes<max_nodes: #si la division pide mas de los que tenemos

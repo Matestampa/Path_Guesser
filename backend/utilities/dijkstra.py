@@ -36,7 +36,7 @@ def DJS(grafo,s,f,all_steps=False):
 
     while True:
           poped=cola.pop() #elimina del queue y devuelve objeto
-          
+          #print(poped.value)
           steps.append(poped.prev.value)
           steps.append(poped.value)
 
@@ -63,3 +63,4 @@ def DJS(grafo,s,f,all_steps=False):
                  if (i.height+poped.distance)<curr.distance: #si se cumple la regla de la distancia menor y eso:
        
                     cola.update(i.value,distance=i.height+poped.distance,prev=poped) #actualizamos(tambien el p_queue se encarga de ordenar nuevamente)
+                    #print(poped.value)

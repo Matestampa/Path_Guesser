@@ -53,7 +53,7 @@ class Screen():
            coords=fig["coords"]
 
            self.cv.create_rectangle(coords["x"]-10,coords["y"]-10,coords["x"]+10,coords["y"]+10,fill="red",tags=("rectangle",fig["value"]))
-           self.cv.create_text(coords["x"],coords["y"],text=fig["value"],tags=(fig["value"]))
+           self.cv.create_text(coords["x"],coords["y"],text=fig["value"],fill="black",tags=("text",fig["value"]+"-"+"text"))
 
            #self.cv.tag_bind("hi","<Button-1>",self.change) tema para despues
 
@@ -64,7 +64,7 @@ class Screen():
            cord0=coords[0]
            cord1=coords[1]
            
-           self.cv.create_line(cord0["x"],cord0["y"],cord1["x"],cord1["y"],tags=("line",fig["conex"][0]+"-"+fig["conex"][1],
+           self.cv.create_line(cord0["x"],cord0["y"],cord1["x"],cord1["y"],fill="black",tags=("line",fig["conex"][0]+"-"+fig["conex"][1],
                                                                                        fig["conex"][1]+"-"+fig["conex"][0]))
 
 
@@ -82,12 +82,14 @@ class Animator():
 
           for i in steps:
               self.cv.itemconfig(i["value"],fill="white")
+              #self.cv.itemconfigure(i["value"]+"-"+"text",fill="green")
 
               if i["type"]=="node":
-                 sleep(0.05)
+                 #sleep(0.05)
                  self.cv.update()
       
       def __restart(self):
 
           self.cv.itemconfigure("line",fill="black")
           self.cv.itemconfigure("rectangle",fill="red")
+          self.cv.itemconfigure("text",fill="black")

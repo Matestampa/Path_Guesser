@@ -142,7 +142,7 @@ class Graph():
           self.vertexs[v1].connect(v2,height)
           self.vertexs[v2].connect(v1,height)
 
-      def remove_egde(self,v1,v2):
+      def remove_edge(self,v1,v2):
           self.vertexs[v1].disconnect(v2)
           self.vertexs[v2].disconnect(v1)
       
