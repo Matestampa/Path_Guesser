@@ -29,8 +29,22 @@ class Memory_Graph():
           path=DJS(self.graph,start,end,all_steps=True)
 
           steps=path["steps"] #devuelve por todos los lados que paso(nos va mostrando los edges xon los valores de donde salen hata donde van)
+          path=path["path"]
+          
+          print(path)
+          for i in path:
+              node=self.graph.get_vertex(i)
+              print(i,node.get_neighs(only_values=True))
+
+          formatted_steps,formatted_path=self.__format_dijk(steps),self.__format_dijk(path)
           
 
+          return formatted_steps,formatted_path
+
+      
+      
+      
+      def __format_dijk(self,steps):
           cont=0
           formated_steps=[]
           
@@ -41,14 +55,14 @@ class Memory_Graph():
                             #cuando es impar, ya aparecio y solo forma parte del edge del siguiente(por eso no lo tenemos en cuenta)
                             #                                                                      (estariamos repitiendo)
                  
-                 if cont==0: #el primero no tiene edge, asi que solo agregamos el nodo
+                 
+                 if cont==0:
                     node={"type":"node","value":steps[cont]}
                     formated_steps.append(node)
                  
                  else:
                     node={"type":"node","value":steps[cont]}
                     edge={"type":"edge","value":steps[cont-1] +"-"+ steps[cont]}
-                    
                     formated_steps.append(edge)
                     formated_steps.append(node)
                     

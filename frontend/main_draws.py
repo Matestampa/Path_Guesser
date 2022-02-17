@@ -32,10 +32,10 @@ class Screen():
               elif i["type"]=="division":
                    self.__new_division(i)
       
-      def perform(self,steps):
+      def perform(self,steps,color,restart=True):
           
           self.animator=Animator(self.cv)
-          self.animator.run(steps)
+          self.animator.run(steps,color,restart)
        
 
       def __new_screen(self):#Limpiamos la pantalla
@@ -77,15 +77,16 @@ class Animator():
           self.cv=cv
       
 
-      def run(self,steps):
-          self.__restart()
+      def run(self,steps,color,restart=True):
+          if restart==True:
+             self.__restart()
 
           for i in steps:
-              self.cv.itemconfig(i["value"],fill="white")
+              self.cv.itemconfig(i["value"],fill=color)
               #self.cv.itemconfigure(i["value"]+"-"+"text",fill="green")
 
               if i["type"]=="node":
-                 #sleep(0.05)
+                 sleep(0.1)
                  self.cv.update()
       
       def __restart(self):

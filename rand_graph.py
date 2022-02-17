@@ -163,7 +163,7 @@ class Rand_Graph():
           self.div_size=int(self.div_size)
 
           self.params={"screen":self.screen_area,"n_divisions":self.n_divisions,"n_nodes":self.n_nodes,
-                       "p":self.p,"div_size":self.div_size,"p_nodes":self.div_nodes}
+                       "conex_complex":self.conex_complex,"p":self.p,"div_size":self.div_size,"p_nodes":self.div_nodes}
 
       def create(self):
           self.div_graph=Division_Graph()
@@ -199,12 +199,11 @@ class Rand_Graph():
                   n_conex=randint(1,self.conex_complex)
                   new_edges=div.create_rand_edge(root=node_value,n_conex=n_conex,format_back=True)#aca tenemos un param para variar
                   
-                  #print(node_value+":"+str(n_conex))
-                  #print(new_edges)
 
                   if new_edges!=None:
                      formatted_objs+=new_edges
               
+              #This particulary connects the divisions
               if len(div.get_neighs())!=0:
                  n_nodes,n_conex=self.make_conex_params(div)
                  
@@ -212,8 +211,6 @@ class Rand_Graph():
                  formatted_objs+=new_edges
 
               
-          
-          
           return formatted_objs,divisions
 
       def make_conex_params(self,div):
@@ -226,7 +223,8 @@ class Rand_Graph():
               max_nodes=int(cant_nodes/2)
 
           n_nodes=randint(1,max_nodes)
-          n_conex=randint(1,self.conex_complex)
+          #n_conex=randint(1,self.conex_complex)
+          n_conex=1
 
           return n_nodes,n_conex    
 
@@ -242,23 +240,3 @@ class Rand_Graph():
                           #Establece conexiones entre todos(primero nodos, despues div) ---> Class: Gen_Conex
           
           #Return: List---> objetos de type "node" y "edge" en formato dict"""
-
-
-
-"""def create_rand_conex(self,fromm_value):
-          fromm_div=self.get_vertex(fromm_value)#obj div from
-          
-          div_neigh=choice(fromm_div.get_neighs())#seleccionamos vecino al que vamos a conectar
-          div_neigh=self.get_vertex(div_neigh.value) #obj del vecino
-
-          fromm_node=choice(fromm_div.get_nodes())#seleccionamos value del nodo de div from
-          to_node=choice(div_neigh.get_nodes()) #seleccionamos value del nodo del vecino elegido
-
-          fromm_node=fromm_div.get_vertex(fromm_node) #obj del nodo de div from
-          to_node=div_neigh.get_vertex(to_node) #obj del nodo del vecino
-
-          dist=fromm_node.get_distance(to_node)#distancia
-          
-          new_edge=self.add_interdiv_edge(fromm_div,div_neigh,fromm_node,to_node,height=dist,format_back=True)
-
-          return new_edge"""          

@@ -17,9 +17,10 @@ def path(vertex):
     lista=[]
 
     actual=vertex
-    while actual!=None:
+    while actual.prev!=None:
           
           lista.insert(0,actual.value)
+          lista.insert(0,actual.prev.value)
           actual=actual.prev
      
     return lista[1:]
@@ -43,11 +44,12 @@ def DJS(grafo,s,f,all_steps=False):
           actual=grafo.get_vertex(poped.value)
 
           if poped.value==f:
+             route=path(poped)
              if all_steps==False:
-                return {"steps":path(poped),"distance":poped.distance}
+                return {"path":route,"distance":poped.distance}
              
              else:
-                return {"steps":steps[1:],"distance":poped.distance}
+                return {"path":route,"steps":steps[1:],"distance":poped.distance}
 
           for i in actual.get_neighs():#recorremos los vecinos
         
